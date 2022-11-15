@@ -1,4 +1,27 @@
+{% for table in tables %}
+<div>{{ table.name }}</div>
+{% for column in table.columns %}
+<div>{{ column }}</div>
+{% endfor %} {% endfor %}
+
 <script>
+  // Get data from template
+  let TABLES_DATA = [];
+  {% if tables is defined %}   
+  TABLES_DATA = {{ tables | tojson(indent=2) }};
+  {% endif %}
+
+  // Turn into an object, shaped like https://github.com/codemirror/lang-sql/blob/ebf115fffdbe07f91465ccbd82868c587f8182bc/test/test-complete.ts#L27.
+  const TABLES_SCHEMA = Object.fromEntries(
+    new Map(
+      TABLES_DATA.map((table) => {
+        return [table.name, table.columns];
+      })
+    ).entries()
+  );
+
+  console.log(TABLES_SCHEMA);
+
   window.onload = () => {
     const sqlFormat = document.querySelector("button#sql-format");
     const readOnly = document.querySelector("pre#sql-query");
@@ -8,7 +31,7 @@
     }
     if (sqlInput) {
       var editor = (window.editor = cm.editorFromTextArea(sqlInput, {
-        lineWrapping: true,
+        schema: TABLES_SCHEMA,
       }));
       if (sqlFormat) {
         sqlFormat.addEventListener("click", (ev) => {
