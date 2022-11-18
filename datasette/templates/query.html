@@ -70,7 +70,7 @@
 
 {% if display_rows %}
 <p class="export-links">This data as {% for name, url in renderers.items() %}<a href="{{ url }}">{{ name }}</a>{{ ", " if not loop.last }}{% endfor %}, <a href="{{ url_csv }}">CSV</a></p>
-<div class="table-wrapper"><table class="rows-and-columns">
+<div class="table-wrapper"><table class="rows-and-columns usa-table">
     <thead>
         <tr>
             {% for column in columns %}<th class="col-{{ column|to_css_class }}" scope="col">{{ column }}</th>{% endfor %}
