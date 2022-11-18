@@ -22,7 +22,14 @@ export function editorFromTextArea(textarea, conf = {}) {
   // https://github.com/codemirror/lang-sql#user-content-sqlconfig.tables
   let view = new EditorView({
     doc: textarea.value,
+
     extensions: [
+      EditorView.theme({
+        ".cm-content": {
+          // Height on cm-content ensures the editor is focusable by clicking beyond the height of the text
+          minHeight: "70px",
+        },
+      }),
       keymap.of([
         {
           key: "Shift-Enter",
